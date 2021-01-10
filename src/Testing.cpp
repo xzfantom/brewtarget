@@ -2,7 +2,7 @@
  * Testing.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2020
  * - Philip Lee <rocketman768@gmail.com>
- * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Mattias Mï¿½hl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,6 @@ void Testing::initTestCase()
 
 void Testing::recipeCalcTest_allGrain()
 {
-   return;
    double const grain_kg = 5.0;
    double const conversion_l = grain_kg * 2.8; // 2.8 L/kg mash thickness
    Recipe* rec = Database::instance().newRecipe(QString("TestRecipe"));
@@ -184,7 +183,6 @@ void Testing::recipeCalcTest_allGrain()
 
 void Testing::postBoilLossOgTest()
 {
-   return;
    double const grain_kg = 5.0;
    Recipe* recNoLoss = Database::instance().newRecipe(QString("TestRecipe_noLoss"));
    Recipe* recLoss = Database::instance().newRecipe(QString("TestRecipe_loss"));
