@@ -67,8 +67,7 @@ jobs:
         
     - name: Dependancies
       shell: bash
-      run: sudo apt-get install -y debhelper 
-      #qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev
+      run: sudo apt-get install -y debhelper qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev
 
     - name: Create orig
       working-directory: ${{github.workspace}}/debian-packaging
