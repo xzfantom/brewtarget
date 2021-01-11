@@ -24,7 +24,7 @@ jobs:
 
     - name: Add absent packages
       shell: bash
-      run: apt-get install libxcb-xinerama0
+      run: sudo apt-get install -y libxcb-xinerama0
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
