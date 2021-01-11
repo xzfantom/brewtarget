@@ -76,7 +76,7 @@ jobs:
     
     - name: Create package
       working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
-      run: dpkg-buildpackage -us -uc
+      run: dpkg-buildpackage -us -uc -d
       shell: bash
     
   
