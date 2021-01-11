@@ -22,10 +22,6 @@ jobs:
       with:
         version: '5.15.2'
 
-    - name: Add absent packages
-      shell: bash
-      run: sudo apt-get install -y libxcb-xinerama0
-
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
@@ -54,3 +50,5 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       #run: ctest -C $BUILD_TYPE
       run: make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)
+      env:
+        QT_QPA_PLATFORM: offscreen
