@@ -2,7 +2,7 @@
  * Testing.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2020
  * - Philip Lee <rocketman768@gmail.com>
- * - Mattias M�hl <mattias@kejsarsten.com>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
