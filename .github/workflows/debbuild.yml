@@ -53,5 +53,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: brewtarget-2.4.0
-        path: ${{github.workspace}}/debian-packaging/brewtarget-*.deb
+        path: ${{github.workspace}}/debian-packaging/*.deb
         retention-days: 5
