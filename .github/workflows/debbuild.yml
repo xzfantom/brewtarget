@@ -32,7 +32,7 @@ jobs:
         
     - name: Dependencies
       shell: bash
-      run: sudo apt-get install -y debhelper qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev lintian
+      run: sudo apt-get install -y debhelper debuild qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev lintian
 
     - name: Create orig
       working-directory: ${{github.workspace}}/debian-packaging
@@ -41,7 +41,7 @@ jobs:
     
     - name: Create package
       working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
-      run: dpkg-buildpackage -us -uc -d --lintian-opts --profile debian
+      run: debuild -us -uc -d --lintian-opts --profile debian
       shell: bash
 
     - name: Check files
@@ -49,10 +49,10 @@ jobs:
       shell: bash
       run: ls
 
-    - name: Lintian
-      working-directory: ${{github.workspace}}/debian-packaging
-      shell: bash
-      run: lintian --pedantic *.changes | less
+#    - name: Lintian
+#      working-directory: ${{github.workspace}}/debian-packaging
+#      shell: bash
+#      run: lintian --pedantic *.changes | less
 
     - name: Upload artifacts
       working-directory: ${{github.workspace}}/debian-packaging
