@@ -44,12 +44,17 @@ jobs:
       run: dpkg-buildpackage -us -uc -d
       shell: bash
 
+    - name: Check files
+      working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
+      shell: bash
+      run: ls
+
     - name: Lintian
       working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
       shell: bash
       run: lintian --pedantic *.changes | less
 
     - name: Upload artifacts
-      working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
+      working-directory: ${{github.workspace}}/debian-packaging
       shell: bash
       run: ls
