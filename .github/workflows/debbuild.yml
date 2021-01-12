@@ -41,7 +41,7 @@ jobs:
     
     - name: Create package
       working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
-      run: dpkg-buildpackage -us -uc -d
+      run: dpkg-buildpackage -us -uc -d --lintian-opts --profile debian
       shell: bash
 
     - name: Check files
