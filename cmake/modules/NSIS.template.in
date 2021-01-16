@@ -1003,19 +1003,19 @@ Function whereIsDb
    Push $btPathVersion
    Call StrStr
    Pop $R1
-   nsislog::log "$EXEDIR\install.log" "btPathVersion: $btPathVersion"
-   nsislog::log "$EXEDIR\install.log" "R2: $R2"
-   nsislog::log "$EXEDIR\install.log" "R3: $R3"
-   nsislog::log "$EXEDIR\install.log" "R1: $R1"
-   nsislog::log "$EXEDIR\install.log" "R8: $R8"
-   nsislog::log "$EXEDIR\install.log" "R9: $R9"
+   ; nsislog::log "$EXEDIR\install.log" "btPathVersion: $btPathVersion"
+   ; nsislog::log "$EXEDIR\install.log" "R2: $R2"
+   ; nsislog::log "$EXEDIR\install.log" "R3: $R3"
+   ; nsislog::log "$EXEDIR\install.log" "R1: $R1"
+   ; nsislog::log "$EXEDIR\install.log" "R8: $R8"
+   ; nsislog::log "$EXEDIR\install.log" "R9: $R9"
    ${If} $R2 == ""
    ${AndIf} $R3 != ""
    ${AndIf} $R1 != ""
       StrCpy $R4 $R8
       StrCpy $0 StopLocate
    ${EndIf}
-   nsislog::log "$EXEDIR\install.log" "0: $0"
+   ; nsislog::log "$EXEDIR\install.log" "0: $0"
    Push $0
 FunctionEnd
 
