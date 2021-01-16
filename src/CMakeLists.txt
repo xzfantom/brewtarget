@@ -373,7 +373,7 @@ SET(brewtarget_ICON "")
 
 IF( WIN32 AND MINGW )
   ADD_CUSTOM_COMMAND(OUTPUT ${WINDIR}/icon.o
-                     COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
+                     COMMAND {CMAKE_RC_COMPILER} -I${CMAKE_CURRENT_SOURCE_DIR}
                      -i${RCFILE}
                      -o${WINDIR}/icon.o
                      DEPENDS ${RCFILE}
