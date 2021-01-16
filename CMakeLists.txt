@@ -462,9 +462,10 @@ IF( WIN32 )
         SET( Qt_DLLs
              ${Qt_DLLs}
              ${IcuDlls}
-            # ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
-            # ${MINGW_BIN_DIR}/libstdc++-6.dll
-            # ${MINGW_BIN_DIR}/libwinpthread-1.dll
+             ${MINGW_BIN_DIR}/libzstd.dll
+             ${MINGW_BIN_DIR}/libpcre2-16-0.dll
+             ${MINGW_BIN_DIR}/zlib1.dll
+             ${MINGW_BIN_DIR}/libcrypto-1_1-x64.dll
         )
      ENDIF()
    ENDIF()
