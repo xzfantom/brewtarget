@@ -12,4 +12,4 @@ jobs:
         with:
           image: xzfantom/mxe-qt5-cmake:1.0
           options: -v ${{github.workspace}}:/work
-          run: "cd /work/build && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 ../ && make package"
+          run: "cd /work && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 ../ && make package"
