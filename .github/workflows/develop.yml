@@ -12,9 +12,55 @@ jobs:
         with:
           image: xzfantom/mxe-qt5-cmake:1.0
           options: -v ${{github.workspace}}:/work
-          run: "mkdir /work/build &&cd /work/build && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 /work && make package"
+          run: "mkdir /work/build && cd /work/build && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 /work && make package"
 
       - uses: actions/upload-artifact@v2
         with:
           name: brewtarget-dev-win
           path: ${{github.workspace}}/build/brewtarget*.exe
+
+  build-deb:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: brewtarget
+    
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        # Should decide minimal version of QT
+        version: '5.15.2'
+        
+    - name: Prepare utils for deb package
+      uses: actions/checkout@v2
+      with:
+        repository: Brewtarget/debian-packaging  
+        path: debian-packaging
+        
+    - name: Dependencies
+      shell: bash
+      run: sudo apt-get install -y debhelper qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev lintian
+
+    - name: Create orig
+      working-directory: ${{github.workspace}}/debian-packaging
+      shell: bash
+      run: ./createorig.sh ../brewtarget
+    
+    - name: Create package
+      # TODO: get app version somewhere and substitute it here
+      working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
+      run: dpkg-buildpackage -us -uc -d
+      shell: bash
+
+#    - name: Lintian
+#      working-directory: ${{github.workspace}}/debian-packaging
+#      shell: bash
+#      run: lintian --pedantic *.changes | less
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: brewtarget-dev-deb
+        path: ${{github.workspace}}/debian-packaging/*.deb
