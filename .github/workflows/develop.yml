@@ -3,7 +3,7 @@ name: develop
 on: [push]
 
 jobs:
-  build:
+  build_win:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
@@ -13,3 +13,8 @@ jobs:
           image: xzfantom/mxe-qt5-cmake:1.0
           options: -v ${{github.workspace}}:/work
           run: "mkdir /work/build &&cd /work/build && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 /work && make package"
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: brewtarget-dev-win
+          path: /work/build/brewtarget*.exe
