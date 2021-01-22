@@ -4,9 +4,10 @@ on: [push]
 
 jobs:
   build:
-    container:
-      image: xzfantom/mxe-qt5-cmake:1.0
-      volumes:
-        - $(pwd):/workspace
-      options: -w /workspace
-      run: "cd ./brewtarget/build && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 ../ && make package"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: addnab/docker-run-action@v1
+        with:
+          image: xzfantom/mxe-qt5-cmake:1.0
+          options: -w /workspace -v $GITHUB_WORKSPACE:/workspace
+          run: "cd ./brewtarget/build && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 ../ && make package"
