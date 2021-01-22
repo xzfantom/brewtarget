@@ -472,7 +472,7 @@ IF( WIN32 )
              ${MINGW_BIN_DIR}/libintl-8.dll
              ${MINGW_BIN_DIR}/libfreetype-6.dll
              ${MINGW_BIN_DIR}/libiconv-2.dll
-             ${MINGW_BIN_DIR}/libpcre1.dll
+             ${MINGW_BIN_DIR}/libpcre-1.dll
              ${MINGW_BIN_DIR}/libssl-1_1-x64.dll
              ${MINGW_BIN_DIR}/libbz2.dll
              ${MINGW_BIN_DIR}/libsqlite3-0.dll
