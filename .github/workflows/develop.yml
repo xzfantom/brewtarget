@@ -24,6 +24,8 @@ jobs:
         shell: bash
         run: i686-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/usr/lib/mxe/usr/i686-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/usr/lib/mxe/usr/bin/i686-w64-mingw32.shared-windres --config Debug --target all -j4 ../
         working-directory: ${{github.workspace}}/build
+        env:
+          PATH: /usr/lib/mxe/usr/bin:$PATH
 
       - uses: actions/upload-artifact@v2
         with:
