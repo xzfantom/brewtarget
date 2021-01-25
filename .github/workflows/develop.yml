@@ -3,16 +3,27 @@ name: develop
 on: [push]
 
 jobs:
-  build_win:
+  build-win:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
         
-      - uses: addnab/docker-run-action@v1
+      - name: add custom deb repository
+        uses: myci-actions/add-deb-repo@4
         with:
-          image: xzfantom/mxe-qt5-cmake:1.0
-          options: -v ${{github.workspace}}:/work
-          run: "mkdir /work/build && cd /work/build && ls && x86_64-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/opt/mxe/usr/x86_64-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/opt/mxe/usr/bin/x86_64-w64-mingw32.shared-windres --config Debug --target all -j4 /work && make package"
+          repo: deb https://pkg.mxe.cc/repos/apt `lsb_release -sc` buster main
+          repo-name: mxe
+          keys: 86B72ED9
+          key-server: keyserver.ubuntu.com
+
+      - name: Dependencies
+        shell: bash
+        run: sudo apt-get install -y mxe-i686-w64-mingw32.shared-qt5 mxe-i686-w64-mingw32.shared-nsis
+
+      - name: 
+        shell: bash
+        run: i686-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/usr/lib/mxe/usr/i686-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/usr/lib/mxe/usr/bin/i686-w64-mingw32.shared-windres --config Debug --target all -j4 ../
+        working-directory: ${{github.workspace}}/build
 
       - uses: actions/upload-artifact@v2
         with:
