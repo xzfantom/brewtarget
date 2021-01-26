@@ -49,7 +49,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         # Should decide minimal version of QT
-        version: '5.15.2'
+        version: '5.10'
         
     - name: Prepare utils for deb package
       uses: actions/checkout@v2
