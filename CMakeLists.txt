@@ -465,7 +465,7 @@ IF( WIN32 )
              ${MINGW_BIN_DIR}/libzstd.dll
              ${MINGW_BIN_DIR}/libpcre2-16-0.dll
              ${MINGW_BIN_DIR}/zlib1.dll
-             ${MINGW_BIN_DIR}/libcrypto-1_1-x64.dll
+             ${MINGW_BIN_DIR}/libcrypto-1_1.dll
              ${MINGW_BIN_DIR}/libpng16-16.dll
              ${MINGW_BIN_DIR}/libharfbuzz-0.dll
              ${MINGW_BIN_DIR}/libglib-2.0-0.dll
@@ -473,7 +473,7 @@ IF( WIN32 )
              ${MINGW_BIN_DIR}/libfreetype-6.dll
              ${MINGW_BIN_DIR}/libiconv-2.dll
              ${MINGW_BIN_DIR}/libpcre-1.dll
-             ${MINGW_BIN_DIR}/libssl-1_1-x64.dll
+             ${MINGW_BIN_DIR}/libssl-1_1.dll
              ${MINGW_BIN_DIR}/libbz2.dll
              ${MINGW_BIN_DIR}/libsqlite3-0.dll
         )
