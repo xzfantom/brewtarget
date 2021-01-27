@@ -19,10 +19,10 @@ jobs:
       with:
         path: brewtarget
     
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: '5.15.2'
+#    - name: Install Qt
+#      uses: jurplel/install-qt-action@v2
+#      with:
+#        version: '5.15.2'
         
     - name: Prepare utils for deb package
       uses: actions/checkout@v2
