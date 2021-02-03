@@ -1,0 +1,78 @@
+name: develop
+
+on: [push]
+
+jobs:
+  build-win:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        
+      - name: add MXE repository
+        uses: myci-actions/add-deb-repo@4
+        with:
+          repo: deb https://pkg.mxe.cc/repos/apt `lsb_release -sc` buster main
+          repo-name: mxe
+          keys: 86B72ED9
+          key-server: keyserver.ubuntu.com
+
+      - name: Dependencies
+        shell: bash
+        run: sudo apt-get install -y mxe-i686-w64-mingw32.shared-qt5 mxe-i686-w64-mingw32.shared-nsis
+        
+      - name: Set path
+        shell: bash
+        run: echo "/usr/lib/mxe/usr/bin" >> $GITHUB_PATH
+
+      - run: mkdir build
+        working-directory: ${{github.workspace}}
+      
+      - name: Compile
+        shell: bash
+        run: i686-w64-mingw32.shared-cmake -DMINGW_BIN_DIR=/usr/lib/mxe/usr/i686-w64-mingw32.shared/bin -DCMAKE_RC_COMPILER:FILEPATH=/usr/lib/mxe/usr/bin/i686-w64-mingw32.shared-windres --config Debug --target all -j4 ../ && make package
+        working-directory: ${{github.workspace}}/build
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: brewtarget-dev-win
+          path: ${{github.workspace}}/build/brewtarget*.exe
+
+  build-deb:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: brewtarget
+    
+    - name: Prepare utils for deb package
+      uses: actions/checkout@v2
+      with:
+        repository: Brewtarget/debian-packaging  
+        path: debian-packaging
+        
+    - name: Dependencies
+      shell: bash
+      run: sudo apt-get install -y debhelper qtbase5-dev qttools5-dev-tools qtmultimedia5-dev libqt5webkit5-dev libqt5svg5-dev qttools5-dev lintian
+
+    - name: Create orig
+      working-directory: ${{github.workspace}}/debian-packaging
+      shell: bash
+      run: ./createorig.sh ../brewtarget
+    
+    - name: Create package
+      # TODO: get app version somewhere and substitute it here
+      working-directory: ${{github.workspace}}/debian-packaging/brewtarget-2.4.0
+      run: dpkg-buildpackage -us -uc
+      shell: bash
+
+#    - name: Lintian
+#      working-directory: ${{github.workspace}}/debian-packaging
+#      shell: bash
+#      run: lintian --pedantic *.changes | less
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: brewtarget-dev-deb
+        path: ${{github.workspace}}/debian-packaging/*.deb
