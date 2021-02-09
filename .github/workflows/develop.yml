@@ -103,7 +103,7 @@ jobs:
         mkdir build
         cd build
         umask 022
-        cmake -DDO_RELEASE_BUILD=ON -DNO_QTMULTIMEDIA=ON -DNO_MESSING_WITH_FLAGS=ON ..
+        cmake -DDO_RELEASE_BUILD=ON -DNO_QTMULTIMEDIA=ON -DNO_MESSING_WITH_FLAGS=ON -DEXEC_PREFIX=/usr ..
         make package
       shell: bash
 
