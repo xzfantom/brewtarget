@@ -1,0 +1,152 @@
+name: main
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+# Current installer NSIS with required plugins don't support x64 package
+#          { msystem: MINGW64, arch: x86_64 },
+          { msystem: MINGW32, arch: i686   }
+        ]
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          path: temp
+          fetch-depth: 0
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: >-
+            mingw-w64-${{ matrix.arch }}-cmake
+            mingw-w64-${{ matrix.arch }}-make
+            mingw-w64-${{ matrix.arch }}-gcc
+            mingw-w64-${{ matrix.arch }}-qt5
+            mingw-w64-${{ matrix.arch }}-xalan-c
+            mingw-w64-${{ matrix.arch }}-nsis
+          update: true
+          release: true
+          path-type: strict
+
+      - name: Download nsis plugins
+        run: |
+          New-Item -ItemType Directory -Force -Path .\temp\build
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\build\Locate.zip
+          Expand-Archive -Path .\temp\build\Locate.zip -DestinationPath .\temp\build\Locate
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\build\Nsislog.zip
+          Expand-Archive -Path .\temp\build\Nsislog.zip -DestinationPath .\temp\build\Nsislog
+
+      - name: Move Checkout
+        run: |
+          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
+
+      - name: CI-Build
+        shell: msys2 {0}
+        run: |
+             cd /C/_/build
+             cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
+             cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
+             cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
+             cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
+             mingw32-make package
+
+      - name: "Upload binaries"
+        if: ${{ success()}}
+        uses: actions/upload-artifact@v2
+        with:
+          name: brewtarget-dev-${{ matrix.msystem }}
+          path: C:/_/build/brewtarget*.exe
+
+      - name: "Upload error build"
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.msystem }}-build
+          path: C:/_/build/
+          retention-days: 2
+
+  build-deb:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+    - name: Dependencies
+      shell: bash
+      run: |
+        sudo apt-get install -y debhelper \
+        rpm \
+        cmake \
+        qtbase5-dev \
+        qttools5-dev-tools \
+        qtmultimedia5-dev \
+        libqt5webkit5-dev \
+        libqt5svg5-dev \
+        qttools5-dev \
+        lintian \
+        rpmlint \
+        libxerces-c-dev \
+        libxalan-c-dev
+    
+    - name: Create package
+      run: |
+        mkdir build
+        cd build
+        cmake -DDO_RELEASE_BUILD=ON -DNO_QTMULTIMEDIA=ON -DNO_MESSING_WITH_FLAGS=ON -DCPACK_INSTALL_PREFIX="" ..
+        make package
+      shell: bash
+
+    - name: Lintian
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: lintian --profile debian --pedantic *.deb | less
+
+    - name: 'Upload deb'
+      uses: actions/upload-artifact@v2
+      with:
+        name: brewtarget-dev-deb
+        path: ${{github.workspace}}/build/*.deb
+
+    - name: 'Upload rpm'
+      uses: actions/upload-artifact@v2
+      with:
+        name: brewtarget-dev-rpm
+        path: ${{github.workspace}}/build/*.rpm
+
+    - name: "Upload error build"
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: debian-packaging
+        path: ${{github.workspace}}/debian-packaging/
+        retention-days: 2
+
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+    
+    - uses: actions/checkout@v2
+      with:
+        path: brewtarget
+        fetch-depth: 0
+
+    - name: Install QT
+      run: brew install qt5
+
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)

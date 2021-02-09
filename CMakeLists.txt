@@ -1,6 +1,6 @@
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
-CMAKE_POLICY( VERSION 3.0 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.12 )
+CMAKE_POLICY( VERSION 3.12 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -71,10 +71,10 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
 
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# Enable and enforce c++11 standards, so that we may lambda
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+SET( CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Enable and enforce c++14 standards
+SET( CMAKE_CXX_STANDARD 14 )
+SET( CMAKE_CXX_STANDARD_REQUIRED_ON )
 
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
@@ -105,36 +105,37 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
-ADD_DEFINITIONS("-std=c++14")
+# ADD_DEFINITIONS("-std=c++14") # We enabled it in set(CMAKE_CXX_STANDARD 14), may be should remove it
 
 #============================Directories=======================================
-SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
-SET(SRCDIR "${ROOTDIR}/src")
-SET(UIDIR "${ROOTDIR}/ui")
-SET(DATADIR "${ROOTDIR}/data")
-SET(TRANSLATIONSDIR "${ROOTDIR}/translations")
-SET(WINDIR "${ROOTDIR}/win")
+SET( ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}" )
+SET( SRCDIR "${ROOTDIR}/src" )
+SET( UIDIR "${ROOTDIR}/ui" )
+SET( DATADIR "${ROOTDIR}/data" )
+SET( TRANSLATIONSDIR "${ROOTDIR}/translations" )
+SET( WINDIR "${ROOTDIR}/win" )
 
-INCLUDE_DIRECTORIES(${SRCDIR})
-INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
-INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
+INCLUDE_DIRECTORIES( ${SRCDIR} )
+INCLUDE_DIRECTORIES( "${CMAKE_BINARY_DIR}/src" ) # In case of out-of-source build.
+INCLUDE_DIRECTORIES( "${CMAKE_BINARY_DIR}/QtDesignerPlugins" )
 
 # Custom cmake modules.
 SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules" )
 
 #==============================OS-specific Commands============================
-IF( UNIX )
-   SET( RM_COMMAND "rm" )
-   SET( RM_ARGS "-f" )
-ELSEIF( WIN32 )
-   SET( RM_COMMAND "del" )
-   SET( RM_ARGS "" )
-ENDIF()
+# Not used anywhere, may be should remove it
+#IF( UNIX )
+#   SET( RM_COMMAND "rm" )
+#   SET( RM_ARGS "-f" )
+#ELSEIF( WIN32 )
+#   SET( RM_COMMAND "del" )
+#   SET( RM_ARGS "" )
+#ENDIF()
 
 #==================================Find Qt5====================================
 
 # The minimum QT5 version we need. Keep as low as necessary.
-SET(QT5_MIN_VERSION 5.3)
+SET(QT5_MIN_VERSION 5.11)
 
 # Automatically run moc on source files when necessary
 SET(CMAKE_AUTOMOC ON)
@@ -228,6 +229,8 @@ IF( NOT EXEC_PREFIX )
    SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
 ENDIF()
 
+SET( CPACK_INSTALL_PREFIX "" )
+
 SET( DATAROOTDIR "${EXEC_PREFIX}/share" )
 SET( BINDIR "${EXEC_PREFIX}/bin" )
 IF( NOT DOCDIR )
@@ -250,7 +253,6 @@ ELSEIF( WIN32 )
   # the prefix needs to be empty. Also, seems that the .exe
   # needs to be in bin/. Fucking piece of shit CPack...
   # Can anybody shed some light on this situation?
-  #SET( CMAKE_INSTALL_PREFIX "" )
   SET( CPACK_INSTALL_PREFIX "" )
   SET( DATAPATH "data" )
   SET( TARGETPATH "bin" )
@@ -502,10 +504,10 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET( CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>" )
   SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software" )
   SET( CPACK_PACKAGE_DESCRIPTION
-       "Brewtarget is a calculator for brewing beer. It is a Qt-based program which
-       allows you to create recipes from a database of ingredients. It calculates all
-       the important parameters, helps you with mash temperatures, and just makes the
-       process of recipe formulation much easier." )
+"Brewtarget is a calculator for brewing beer. It is a Qt-based program which
+allows you to create recipes from a database of ingredients. It calculates all
+the important parameters, helps you with mash temperatures, and just makes the
+process of recipe formulation much easier." )
 
   SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
   SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})   # to create a debian confirm file-version-string
@@ -529,14 +531,14 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
     SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
 
-    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
+    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}-${brewtarget_VERSION_STRING})
 
     #-----------------RPM-----------------
-    SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
-    SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
-    SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
-    SET(CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#")
-    SET(CPACK_RPM_USER_FILELIST "%ignore /usr" "%ignore /usr/local" "%ignore /usr/local/bin" "%ignore /usr/local/share" "%ignore /usr/local/share/applications")
+    SET( CPACK_RPM_PACKAGE_LICENSE "GPLv3" )
+    SET( CPACK_RPM_PACKAGE_GROUP "Applications/Productivity" )
+    SET( CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0" ) # NOTE: I'm just guessing here. Somebody needs to check.
+    SET( CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#" )
+    SET( CPACK_RPM_USER_FILELIST "%ignore /usr" "%ignore /usr/local" "%ignore /usr/local/bin" "%ignore /usr/local/share" "%ignore /usr/local/share/applications" )
   #============================WINDOWS===============================
   ELSEIF(WIN32)
     # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
