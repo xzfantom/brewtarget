@@ -107,6 +107,7 @@ jobs:
       shell: bash
 
     - name: Lintian
+      continue-on-error: true
       working-directory: ${{github.workspace}}/build
       shell: bash
       run: lintian --profile debian --pedantic *.deb | less
@@ -140,8 +141,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install QT
-      run: brew install qt5
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
 
     - name: Build
       run: |
