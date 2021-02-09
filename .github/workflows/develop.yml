@@ -138,7 +138,6 @@ jobs:
     
     - uses: actions/checkout@v2
       with:
-        path: brewtarget
         fetch-depth: 0
 
     - name: Install QT
