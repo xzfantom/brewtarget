@@ -157,3 +157,7 @@ jobs:
         cd build
         cmake ..
         make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)
+
+    - name: Make package
+      continue-on-error: true # not yet tested
+      run: make package
