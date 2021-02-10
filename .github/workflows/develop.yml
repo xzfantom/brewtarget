@@ -160,4 +160,6 @@ jobs:
 
     - name: Make package
       continue-on-error: true # not yet tested
-      run: make package
+      run: |
+        cd build
+        make package
