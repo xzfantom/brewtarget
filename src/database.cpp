@@ -232,7 +232,7 @@ bool Database::loadSQLite()
 
 bool Database::loadPgSQL()
 {
-   bool dbIsOpen;
+   bool dbIsOpen = false;
    QSqlDatabase sqldb;
 
    dbHostname = Brewtarget::option("dbHostname").toString();
@@ -248,15 +248,14 @@ bool Database::loadPgSQL()
    else {
       bool isOk = false;
 
-      // prompt for the password until we get it? I don't think this is a good
-      // idea?
-      while ( ! isOk ) {
-         dbPassword = QInputDialog::getText(nullptr,tr("Database password"),
-               tr("Password"), QLineEdit::Password,QString(),&isOk);
-         if ( isOk ) {
-            isOk = verifyDbConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema,
-                                 dbName, dbUsername, dbPassword);
-         }
+      dbPassword = QInputDialog::getText(nullptr,tr("Database password"),
+            tr("Password"), QLineEdit::Password,QString(),&isOk);
+      if ( isOk ) {
+         isOk = verifyDbConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema,
+                              dbName, dbUsername, dbPassword);
+      }
+      else{
+         return dbIsOpen;
       }
    }
 

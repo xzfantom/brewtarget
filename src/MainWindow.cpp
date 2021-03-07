@@ -164,7 +164,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set up the printer
    printer = new QPrinter;
-   printer->setPageSize(QPrinter::Letter);
+   printer->setPageSize(QPageSize::Letter);
    return;
 }
 

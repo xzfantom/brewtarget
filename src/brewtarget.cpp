@@ -9,7 +9,7 @@
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
  * - Ted Wright <unsure>
- * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Mattias Mï¿½hl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -468,7 +468,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Salt*> >();
 
    /* Here we initialize the logging to log to stderr to start with.
-    * this is to get the really early logging out put to the console.
+    * this is to get the really early logging output to the console.
     * further down we read in the users settings and then update the settings in the logging library
     */
    Log::initializeLog();
