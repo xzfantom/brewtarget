@@ -43,6 +43,7 @@ jobs:
       - name: CI-Build
         shell: msys2 {0}
         run: |
+             mkdir /C/_/build
              cd /C/_/build
              cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
              cmake --build . --target package
