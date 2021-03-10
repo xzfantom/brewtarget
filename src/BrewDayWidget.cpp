@@ -20,6 +20,7 @@
  */
 
 #include <QListWidgetItem>
+#include <QPageSize>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDate>
@@ -56,7 +57,7 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) :
 
 
    // Set up the printer stuff
-   printer->setPageSize(QPrinter::Letter);
+   printer->setPageSize(QPageSize(QPageSize::Letter));
 
    // populate the drop down list
 

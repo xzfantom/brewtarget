@@ -56,6 +56,7 @@
 #include <QBrush>
 #include <QPen>
 #include <QDesktopWidget>
+#include <QPageSize>
 
 #include "Algorithms.h"
 #include "MashStepEditor.h"
@@ -164,7 +165,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set up the printer
    printer = new QPrinter;
-   printer->setPageSize(QPageSize::Letter);
+   printer->setPageSize(QPageSize(QPageSize::Letter));
    return;
 }
 

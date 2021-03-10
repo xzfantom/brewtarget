@@ -36,14 +36,6 @@ jobs:
           release: true
           path-type: strict
 
-      - name: Download nsis plugins
-        run: |
-          New-Item -ItemType Directory -Force -Path .\temp\build
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\build\Locate.zip
-          Expand-Archive -Path .\temp\build\Locate.zip -DestinationPath .\temp\build\Locate
-          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\build\Nsislog.zip
-          Expand-Archive -Path .\temp\build\Nsislog.zip -DestinationPath .\temp\build\Nsislog
-
       - name: Move Checkout
         run: |
           Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
@@ -52,11 +44,8 @@ jobs:
         shell: msys2 {0}
         run: |
              cd /C/_/build
-             cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
-             cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
-             cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
              cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
-             mingw32-make package
+             cmake --build . --target package
 
       - name: "Upload binaries"
         if: ${{ success()}}
@@ -84,6 +73,7 @@ jobs:
     - name: Dependencies
       shell: bash
       run: |
+        sudo apt-get update
         sudo apt-get install -y debhelper \
         rpm \
         cmake \

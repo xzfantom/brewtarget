@@ -457,6 +457,23 @@ IF( WIN32 AND MINGW )
    #    '-Wl,-subsystem,windows' supresses the output command window.
    #    '-Wl,-s' strips the executable of symbols.
    SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows")
+
+   if(TARGET Qt5::windeployqt)
+      # execute windeployqt in a tmp directory after build
+      add_custom_command(TARGET ${brewtarget_EXECUTABLE}
+         POST_BUILD
+         COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
+         # COMMAND set PATH=%PATH%$<SEMICOLON>${qt5_install_prefix}/bin
+         COMMAND Qt5::windeployqt --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" "$<TARGET_FILE_DIR:${brewtarget_EXECUTABLE}>/$<TARGET_FILE_NAME:${brewtarget_EXECUTABLE}>"
+   )
+
+   # copy deployment directory during installation
+   install(
+      DIRECTORY
+      "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
+      DESTINATION bin
+   )
+   endif()
 ENDIF()
 
 SET( QT5_USE_MODULES_LIST
