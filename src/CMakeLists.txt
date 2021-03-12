@@ -542,6 +542,30 @@ INSTALL( TARGETS ${brewtarget_EXECUTABLE}
          RUNTIME DESTINATION ${TARGETPATH}
          COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
 
+IF( WIN32 )
+      install(CODE 
+      "
+         file(GET_RUNTIME_DEPENDENCIES 
+            RESOLVED_DEPENDENCIES_VAR deps 
+            UNRESOLVED_DEPENDENCIES_VAR confdeps
+            EXECUTABLES src/${brewtarget_EXECUTABLE}.exe
+            PRE_EXCLUDE_REGEXES \"^api-ms-win.*\$|^ext-ms.*\$\"
+            POST_EXCLUDE_REGEXES \".*system32.*\"
+            DIRECTORIES ${Mingw_Path}
+         )
+         #message(\"Installing: \${deps}\")
+         #message(\"Not found: \${confdeps}\")
+         FOREACH (fdep IN LISTS deps)
+            message( \"\${fdep}\" )
+            file( INSTALL
+               DESTINATION bin
+               TYPE SHARED_LIBRARY
+               FOLLOW_SYMLINK_CHAIN
+               FILES \"\${fdep}\")
+         ENDFOREACH()
+      ")
+   ENDIF()
+
 # Install the translations.
 INSTALL(FILES ${QM_FILES}
         DESTINATION "${DATAPATH}/translations_qm"
