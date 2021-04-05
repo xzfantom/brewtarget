@@ -559,3 +559,23 @@ IF( APPLE )
    )
 ENDIF()
 
+IF( WIN32 )
+   install(CODE [[
+      file(GET_RUNTIME_DEPENDENCIES 
+         RESOLVED_DEPENDENCIES_VAR deps 
+         EXECUTABLES ${brewtarget_EXECUTABLE}
+         DIRECTORIES ${MINGW_BIN_DIR}
+      )
+      message(STATUS ${deps})
+      foreach(_file ${debs})
+         file(INSTALL 
+            DESTINATION "bin" 
+            TYPE SHARED_LIBRARY
+            FOLLOW_SYMLINK_CHAIN
+            FILES "${_file}")
+      endforeach()
+   ]]
+   COMPONENT ${RUNTIME_INSTALL_COMPONENT}
+   )
+
+ENDIF()

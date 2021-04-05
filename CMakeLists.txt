@@ -470,11 +470,6 @@ IF( WIN32 )
         MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin" )
      ELSE()
         get_filename_component( Mingw_Path ${CMAKE_CXX_COMPILER} PATH )
-
-        SET( Qt_DLLs
-             ${Qt_DLLs}
-             
-        )
      ENDIF()
    ENDIF()
 ENDIF()
@@ -616,17 +611,6 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
       INSTALL( FILES ${CHANGELOG}
                DESTINATION ${DOCPATH}
                COMPONENT ${DATA_INSTALL_COMPONENT} )
-   ENDIF()
-
-   IF( WIN32 )
-      install(CODE [[
-      file(GET_RUNTIME_DEPENDENCIES 
-         RESOLVED_DEPENDENCIES_VAR deps 
-         EXECUTABLES ${brewtarget_EXECUTABLE}
-      )
-      message(STATUS ${deps})
-      file(INSTALL DESTINATION "bin" TYPE EXECUTABLE FILES ${deps})
-      ]])
    ENDIF()
 
    IF( CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS )
