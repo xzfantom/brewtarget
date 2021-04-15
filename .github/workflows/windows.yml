@@ -92,7 +92,7 @@ jobs:
         id: package-name
         working-directory: C:/_/build/
         run: |
-             echo ::set-output name=filename::$(Get-ChildItem . -Filter brewtarget*.exe | % { $_.FullName })
+             echo '::set-output name=filename::$(Get-ChildItem . -Filter brewtarget*.exe | % { $_.FullName })'
 
       - name: "Upload binaries"
         if: ${{ success()}}
