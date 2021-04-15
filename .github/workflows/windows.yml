@@ -87,14 +87,19 @@ jobs:
         run: |
              cd /C/_/build
              cmake --build . --target package
-             echo ::set-output name=filename::$(ls -d $PWD/brewtarget*.exe)
+
+      - name: Package filename
+        id: package-name
+        working-directory: C:/_/build/
+        run: |
+             echo ::set-output name=filename::$(Get-ChildItem . -Filter brewtarget*.exe | % { $_.FullName })
 
       - name: "Upload binaries"
         if: ${{ success()}}
         uses: actions/upload-artifact@v2
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
-          path: ${{ steps.package-generator.outputs.filename }}
+          path: ${{ steps.package-name.outputs.filename }}
           retention-days: 7
 
       - name: "Upload error build"
@@ -113,7 +118,7 @@ jobs:
         with:
           upload_url: https://uploads.github.com/repos/xzfantom/brewtarget/releases/41437955/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
           release_id: 41437955 # same as above (id can just be taken out the upload_url, it's used to find old releases)
-          asset_path: ${{ steps.package-generator.outputs.filename }} # path to archive to upload
+          asset_path: ${{ steps.package-name.outputs.filename }} # path to archive to upload
           asset_name: brewtarget_windows-nightly-$$.exe # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
           asset_content_type: application/application/octet-stream # required by GitHub API
           max_releases: 7 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
