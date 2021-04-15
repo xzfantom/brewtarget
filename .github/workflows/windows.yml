@@ -87,7 +87,7 @@ jobs:
         run: |
              cd /C/_/build
              cmake --build . --target package
-             echo ::set-output name=filename::$(Get-ChildItem . -Filter brewtarget*.exe | % { $_.FullName })
+             echo ::set-output name=filename::$(ls -d $PWD/brewtarget*.exe)
 
       - name: "Upload binaries"
         if: ${{ success()}}
