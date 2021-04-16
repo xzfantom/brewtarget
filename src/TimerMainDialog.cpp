@@ -128,10 +128,8 @@ void TimerMainDialog::resetTimers()
     boilTime->setBoilTime(setBoilTimeBox->value() * 60);
     updateTime();
     // Reset all children timers
-    if (!timers->isEmpty())
-    {
-        foreach (TimerWidget* t, *timers)
-        {
+    if (!timers->isEmpty()) {
+        foreach (TimerWidget* t, *timers) {
             t->reset();
         }
     }
