@@ -500,7 +500,14 @@ void OptionDialog::saveAndClose()
 
 void OptionDialog::cancel()
 {
-   setVisible(false);
+   if (this->parentWidget() != nullptr)
+   {
+      setVisible(false);
+   }
+   else
+   {
+      close();
+   }
 }
 
 void OptionDialog::showChanges()

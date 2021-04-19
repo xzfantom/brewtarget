@@ -76,6 +76,7 @@
 
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
+#include "OptionDialog.h"
 #include "mash.h"
 #include "instruction.h"
 #include "water.h"
@@ -632,8 +633,17 @@ int Brewtarget::run(const QString &userDirectory)
    qApp->processEvents();
    if( !initialize(userDirectory) )
    {
-      cleanup();
-      return 1;
+      OptionDialog* optionWindow = new OptionDialog(nullptr);
+      optionWindow->setAttribute(Qt::WA_DeleteOnClose);
+      optionWindow->show();
+      QEventLoop loop;
+      connect(optionWindow, SIGNAL(destroyed()), & loop, SLOT(quit()));
+      loop.exec();
+      if ( !initialize(userDirectory) )
+      {
+         cleanup();
+         return 1;
+      }
    }
    qDebug() << QString("Starting Brewtarget v%1 on %2.").arg(VERSIONSTRING).arg(QSysInfo::prettyProductName());
    _mainWindow = new MainWindow();
