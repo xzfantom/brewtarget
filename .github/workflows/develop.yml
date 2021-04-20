@@ -141,8 +141,15 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
+      with:
+          version: 5.9.5
+
+    - name: Install dependencies
+      run: brew install xalan-c
 
     - name: Build
+      env:
+        QT_QPA_PLATFORM: offscreen
       run: |
         mkdir build
         cd build
@@ -150,7 +157,6 @@ jobs:
         make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)
 
     - name: Make package
-      continue-on-error: true # not yet tested
       run: |
         cd build
         make package

@@ -177,8 +177,8 @@ class KilogramUnit : public Unit
       KilogramUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 
 };
 
@@ -188,8 +188,8 @@ class GramUnit : public Unit
       GramUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class MilligramUnit : public Unit
@@ -198,8 +198,8 @@ class MilligramUnit : public Unit
       MilligramUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class PoundUnit : public Unit
@@ -208,8 +208,8 @@ class PoundUnit : public Unit
       PoundUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class OunceUnit : public Unit
@@ -218,8 +218,8 @@ class OunceUnit : public Unit
       OunceUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 // ================ Volume ================
@@ -229,8 +229,8 @@ class LiterUnit : public Unit
       LiterUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class MilliliterUnit : public Unit
@@ -239,8 +239,8 @@ class MilliliterUnit : public Unit
       MilliliterUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USBarrelUnit : public Unit
@@ -249,8 +249,8 @@ class USBarrelUnit : public Unit
       USBarrelUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USGallonUnit : public Unit
@@ -259,8 +259,8 @@ class USGallonUnit : public Unit
       USGallonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USQuartUnit : public Unit
@@ -269,8 +269,8 @@ class USQuartUnit : public Unit
       USQuartUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USCupUnit : public Unit
@@ -279,8 +279,8 @@ class USCupUnit : public Unit
       USCupUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
       const double boundary() const { return 0.25; } // override the default
 
 };
@@ -291,8 +291,8 @@ class ImperialBarrelUnit : public Unit
       ImperialBarrelUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class ImperialGallonUnit : public Unit
@@ -301,8 +301,8 @@ class ImperialGallonUnit : public Unit
       ImperialGallonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class ImperialQuartUnit : public Unit
@@ -311,8 +311,8 @@ class ImperialQuartUnit : public Unit
       ImperialQuartUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class ImperialCupUnit : public Unit
@@ -321,8 +321,8 @@ class ImperialCupUnit : public Unit
       ImperialCupUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
       const double boundary() const { return 0.25; }
 
 };
@@ -333,8 +333,8 @@ class ImperialTablespoonUnit : public Unit
       ImperialTablespoonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class ImperialTeaspoonUnit : public Unit
@@ -343,8 +343,8 @@ class ImperialTeaspoonUnit : public Unit
       ImperialTeaspoonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USTablespoonUnit : public Unit
@@ -353,8 +353,8 @@ class USTablespoonUnit : public Unit
       USTablespoonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class USTeaspoonUnit : public Unit
@@ -363,8 +363,8 @@ class USTeaspoonUnit : public Unit
       USTeaspoonUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 // ================ Time ================
@@ -374,8 +374,8 @@ class SecondUnit : public Unit
       SecondUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
       const double boundary() const { return 90.0; };
 
 };
@@ -386,8 +386,8 @@ class MinuteUnit : public Unit
       MinuteUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class HourUnit : public Unit
@@ -396,8 +396,8 @@ class HourUnit : public Unit
       HourUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
       const double boundary() const { return 2.0; }
 
 };
@@ -408,8 +408,8 @@ public:
    DayUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 // ================ Temperature ================
@@ -420,8 +420,8 @@ class CelsiusUnit : public Unit
       CelsiusUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class KelvinUnit : public Unit
@@ -430,8 +430,8 @@ class KelvinUnit : public Unit
       KelvinUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 class FahrenheitUnit : public Unit
@@ -440,8 +440,8 @@ class FahrenheitUnit : public Unit
       FahrenheitUnit();
 
       // Inherited methods.
-      double toSI( double amt ) const;
-      double fromSI( double amt ) const;
+      double toSI( double amt ) const override;
+      double fromSI( double amt ) const override;
 };
 
 // ================ Color =======================
@@ -453,8 +453,8 @@ public:
    SRMUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 class EBCUnit : public Unit
@@ -463,8 +463,8 @@ public:
    EBCUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 // ================ Density =======================
@@ -477,8 +477,8 @@ public:
    SgUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 class PlatoUnit : public Unit
@@ -487,8 +487,8 @@ public:
    PlatoUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 // == diastatic power ==
@@ -501,8 +501,8 @@ public:
    LintnerUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 class WKUnit : public Unit
@@ -511,8 +511,8 @@ public:
    WKUnit();
 
    // Inherited methods.
-   double toSI( double amt ) const;
-   double fromSI( double amt ) const;
+   double toSI( double amt ) const override;
+   double fromSI( double amt ) const override;
 };
 
 

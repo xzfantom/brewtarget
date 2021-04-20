@@ -400,14 +400,6 @@ private:
     */
    static void cleanup();
 
-
-   /*!
-    * \brief Checks if another instance is already running.
-    *
-    * Currently only works on Unix systems.
-    */
-   static bool instanceRunning();
-
    /*!
     * \brief If false, run Brewtarget in a way that requires no user interaction
     *
