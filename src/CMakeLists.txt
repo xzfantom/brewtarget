@@ -68,7 +68,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AlcoholTool.cpp
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerColorWidget.cpp
-    ${SRCDIR}/beerxml.cpp
     ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
@@ -86,19 +85,15 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeItem.cpp
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
-    ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/DatabaseSchema.cpp
     ${SRCDIR}/DatabaseSchemaHelper.cpp
-    ${SRCDIR}/DiastaticPowerUnitSystem.cpp
-    ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/EquipmentListModel.cpp
-    ${SRCDIR}/FahrenheitTempUnitSystem.cpp
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableEditor.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
@@ -112,7 +107,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HydrometerTool.cpp
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
-    ${SRCDIR}/ImperialVolumeUnitSystem.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/InventoryFormatter.cpp
     ${SRCDIR}/Log.cpp
@@ -140,6 +134,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/model/MashStep.cpp
     ${SRCDIR}/model/Misc.cpp
     ${SRCDIR}/model/NamedEntity.cpp
+    ${SRCDIR}/model/NamedParameterBundle.cpp
     ${SRCDIR}/model/Recipe.cpp
     ${SRCDIR}/model/Salt.cpp
     ${SRCDIR}/model/Style.cpp
@@ -150,7 +145,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PitchDialog.cpp
-    ${SRCDIR}/PlatoDensityUnitSystem.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/PropertySchema.cpp
@@ -162,11 +156,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/SaltTableModel.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
-    ${SRCDIR}/SgDensityUnitSystem.cpp
     ${SRCDIR}/SimpleUndoableUpdate.cpp
-    ${SRCDIR}/SIVolumeUnitSystem.cpp
-    ${SRCDIR}/SIWeightUnitSystem.cpp
-    ${SRCDIR}/SrmColorUnitSystem.cpp
     ${SRCDIR}/StrikeWaterDialog.cpp
     ${SRCDIR}/StyleButton.cpp
     ${SRCDIR}/StyleEditor.cpp
@@ -177,12 +167,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
-    ${SRCDIR}/TimeUnitSystem.cpp
-    ${SRCDIR}/unit.cpp
+    ${SRCDIR}/Unit.cpp
     ${SRCDIR}/UnitSystem.cpp
-    ${SRCDIR}/UnitSystems.cpp
-    ${SRCDIR}/USVolumeUnitSystem.cpp
-    ${SRCDIR}/USWeightUnitSystem.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp
@@ -190,6 +176,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/WaterSortFilterProxyModel.cpp
     ${SRCDIR}/WaterTableModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/xml/BeerXml.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp

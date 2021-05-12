@@ -77,7 +77,7 @@
 #include "database.h"
 #include "YeastDialog.h"
 #include "config.h"
-#include "unit.h"
+#include "Unit.h"
 #include "ScaleRecipeTool.h"
 #include "HopTableModel.h"
 #include "BtDigitWidget.h"
@@ -122,7 +122,7 @@
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterEditor.h"
-#include "beerxml.h"
+#include "xml/BeerXml.h"
 #include "RelationalUndoableUpdate.h"
 #include "UndoableAddOrRemove.h"
 #include "BtHorizontalTabs.h"
@@ -1233,25 +1233,25 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_boilSg->setText(recipeObs);
 
    updateDensitySlider("og", styleRangeWidget_og, 1.120);
-   styleRangeWidget_og->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"og",Units::sp_grav,0));
+   styleRangeWidget_og->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"og",&Units::sp_grav,0));
 
    updateDensitySlider("fg", styleRangeWidget_fg, 1.03);
-   styleRangeWidget_fg->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"fg",Units::sp_grav,0));
+   styleRangeWidget_fg->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"fg",&Units::sp_grav,0));
 
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
 
-   rangeWidget_batchsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"batchSize_l", Units::liters,0));
-   rangeWidget_batchsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", Units::liters,0));
-   rangeWidget_batchsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", Units::liters,0));
+   rangeWidget_batchsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"batchSize_l", &Units::liters,0));
+   rangeWidget_batchsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", &Units::liters,0));
+   rangeWidget_batchsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", &Units::liters,0));
 
-   rangeWidget_boilsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilSize_l", Units::liters,0));
-   rangeWidget_boilsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", Units::liters,0));
-   rangeWidget_boilsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", Units::liters,0));
+   rangeWidget_boilsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilSize_l", &Units::liters,0));
+   rangeWidget_boilsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", &Units::liters,0));
+   rangeWidget_boilsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", &Units::liters,0));
 
    /* Colors need the same basic treatment as gravity */
    updateColorSlider("color_srm", styleRangeWidget_srm);
-   styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"color_srm",Units::srm,0));
+   styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"color_srm",&Units::srm,0));
 
    // In some, incomplete, recipes, OG is approximately 1.000, which then makes GU close to 0 and thus IBU/GU insanely
    // large.  Besides being meaningless, such a large number takes up a lot of space.  So, where gravity units are
@@ -1435,7 +1435,13 @@ void MainWindow::droppedRecipeFermentable(QList<Fermentable*>ferms)
 
    if ( tabWidget_ingredients->currentWidget() != fermentableTab )
       tabWidget_ingredients->setCurrentWidget(fermentableTab);
-   Database::instance().addToRecipe(recipeObs, ferms);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Fermentable>,
+                             ferms,
+                             &Recipe::remove<Fermentable>,
+                             tr("Drop fermentables on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeHop(QList<Hop*>hops)
@@ -1445,7 +1451,13 @@ void MainWindow::droppedRecipeHop(QList<Hop*>hops)
 
    if ( tabWidget_ingredients->currentWidget() != hopsTab )
       tabWidget_ingredients->setCurrentWidget(hopsTab);
-   Database::instance().addToRecipe(recipeObs, hops);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Hop>,
+                             hops,
+                             &Recipe::remove<Hop>,
+                             tr("Drop hops on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
@@ -1455,7 +1467,13 @@ void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
 
    if ( tabWidget_ingredients->currentWidget() != miscTab )
       tabWidget_ingredients->setCurrentWidget(miscTab);
-   Database::instance().addToRecipe(recipeObs, miscs);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Misc>,
+                             miscs,
+                             &Recipe::remove<Misc>,
+                             tr("Drop misc on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
@@ -1465,7 +1483,13 @@ void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
 
    if ( tabWidget_ingredients->currentWidget() != yeastTab )
       tabWidget_ingredients->setCurrentWidget(yeastTab);
-   Database::instance().addToRecipe(recipeObs, yeasts);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Yeast>,
+                             yeasts,
+                             &Recipe::remove<Yeast>,
+                             tr("Drop yeast on a recipe"))
+   );
 }
 
 void MainWindow::updateRecipeBatchSize()
@@ -1493,7 +1517,7 @@ void MainWindow::updateRecipeBoilTime()
       return;
 
    kit = recipeObs->equipment();
-   boilTime = Brewtarget::qStringToSI( lineEdit_boilTime->text(),Units::minutes );
+   boilTime = Brewtarget::qStringToSI( lineEdit_boilTime->text(),&Units::minutes );
 
    // Here, we rely on a signal/slot connection to propagate the equipment
    // changes to recipeObs->boilTime_min and maybe recipeObs->boilSize_l
