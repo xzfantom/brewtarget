@@ -35,6 +35,7 @@
         <file alias="images/flagCzech.svg">images/flagCzech.svg</file>
         <file alias="images/folder.png">images/folder.png</file>
         <file alias="images/glass2.png">images/glass2.png</file>
+        <file alias="images/grain2glass.svg">images/grain2glass.svg</file>
         <file alias="images/help-contents.png">images/help-contents.png</file>
         <file alias="images/hydrometer.svg">images/hydrometer.svg</file>
         <file alias="images/kbruch.png">images/kbruch.png</file>
@@ -59,9 +60,11 @@
         <file alias="images/smallInfo.svg">images/smallInfo.svg</file>
         <file alias="images/smallOutArrow.svg">images/smallOutArrow.svg</file>
         <file alias="images/yeastVial.svg">images/yeastVial.svg</file>
+        <file alias="images/testtube.svg">images/testtube.svg</file>
         <file alias="images/smallMinus.svg">images/smallMinus.svg</file>
         <file alias="images/title.svg">images/title.svg</file>
         <file alias="images/title.png">images/title.png</file>
+        <file alias="images/circle.png">images/circle.png</file>
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/inventory.css">css/inventory.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>
