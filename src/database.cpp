@@ -29,6 +29,10 @@
 
 #include "database.h"
 
+// Uncomment the following two includes to enable stacktraces with boost::stacktrace::stacktrace()
+#include <boost/stacktrace.hpp>
+#include <sstream>      // std::ostringstream
+
 #include <QList>
 #include <QDomDocument>
 #include <QIODevice>
@@ -1078,7 +1082,9 @@ QString Database::findRecipeFromForeignKey(TableSchema* tbl, NamedEntity const *
                         .arg(obj->key());
    }
    else {
-      qInfo() << Q_FUNC_INFO << "couldn't find a key for" << obj->name();
+      qInfo() <<
+         Q_FUNC_INFO << "couldn't find a key for" << obj->metaObject()->className() << ":" << obj->name() <<
+         "(which has table" << obj->table() << ")";
    }
    return QString();
 }
@@ -1095,6 +1101,9 @@ QString Database::findRecipeFromInRec(TableSchema* tbl, TableSchema* inrec, Name
 // this handles all things with in_recipe tables (fermentables, hops, miscs, waters and yeasts)
 Recipe* Database::getParentRecipe(NamedEntity const * ing)
 {
+   qDebug() <<
+      Q_FUNC_INFO << ing->metaObject()->className() << "has table #" << ing->table() << "(" <<
+      this->dbDefn->tableName(ing->table()) << ")";
    TableSchema* table = this->dbDefn->table( ing->table() );
    TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
    QString select;
@@ -1105,7 +1114,7 @@ Recipe* Database::getParentRecipe(NamedEntity const * ing)
    else {
       select = findRecipeFromInRec(table, inrec, ing);
    }
-   
+
    Recipe * parent = nullptr;
 
    QSqlQuery q(sqlDatabase());
@@ -2143,7 +2152,7 @@ void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
       q.finish();
    }
    catch( QString e ) {
-      if ( transact ) 
+      if ( transact )
          sqlDatabase().rollback();
       qCritical() << Q_FUNC_INFO << e;
       abort();
@@ -2180,7 +2189,7 @@ Recipe* Database::newRecipe(Recipe* other, bool ancestor)
       addToRecipe( tmp, other->style(), false, false);
 
       // if other is an ancestor, we need to set display false on other and
-      // link the two. 
+      // link the two.
       if ( ancestor ) {
          setAncestor(tmp,other,false);
       }
@@ -3020,7 +3029,10 @@ void Database::setInventory(NamedEntity* ins, QVariant value, int invKey, bool n
    int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
    // I would like to get rid of this, but I need it to properly signal
    if ( invKey == 0 ) {
-      qDebug() << "bad inventory call. find it an kill it";
+      // Uncomment this block if the message below is firing, as it will usually help find the bug quickly
+      std::ostringstream stacktrace;
+      stacktrace << boost::stacktrace::stacktrace();
+      qDebug().noquote() << Q_FUNC_INFO << "bad inventory call. find it an kill it.  Stack:\n" << QString::fromStdString(stacktrace.str());
    }
 
    if ( ! value.isValid() || value.isNull() ) {
@@ -3071,8 +3083,23 @@ bool Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
    Recipe *owner, *spawn;
    NamedEntity* neClone;
    bool noclone = true;
+   qDebug() <<
+      Q_FUNC_INFO << "Modifying: " << object->metaObject()->className() << " property " << propName << "to value" <<
+      value;
 
-   owner = getParentRecipe(object);
+   //
+   // We have to be careful here as there are several overloaded versions of getParentRecipe(), one for NamedEntity,
+   // one for BrewNote and one for MashStep.  You might think that if object is actually pointing to a BrewNote or a
+   // MashStep then the right version of getParentRecipe() would get called but, in C++, that's not the case.  In C++,
+   // dynamic dispatch only happens on virtual member functions.
+   //
+   if (MashStep * mashStep = dynamic_cast<MashStep *>(object)) {
+      owner = getParentRecipe(mashStep);
+   } else if (BrewNote * brewNote = dynamic_cast<BrewNote *>(object)) {
+      owner = getParentRecipe(brewNote);
+   } else {
+      owner = getParentRecipe(object);
+   }
 
    // if the ingredient is in a recipe and that recipe needs a version
    if ( owner && wantsVersion(owner) ) {
@@ -3599,7 +3626,7 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, Hop* exclude, b
 
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
-   if ( m == nullptr ) 
+   if ( m == nullptr )
       return nullptr;
 
    if ( rec->locked() )

@@ -4,6 +4,9 @@
 # See also ../CMakeLists.txt
 #
 
+# Uncomment the next line for verbose build output
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # The current directory in the original source.
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 # The current directory in the output build directory.
@@ -135,6 +138,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/model/MashStep.cpp
     ${SRCDIR}/model/Misc.cpp
     ${SRCDIR}/model/NamedEntity.cpp
+    ${SRCDIR}/model/NamedEntityWithInventory.cpp
     ${SRCDIR}/model/NamedParameterBundle.cpp
     ${SRCDIR}/model/Recipe.cpp
     ${SRCDIR}/model/Salt.cpp
@@ -298,6 +302,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/model/MashStep.h
     ${SRCDIR}/model/Misc.h
     ${SRCDIR}/model/NamedEntity.h
+    ${SRCDIR}/model/NamedEntityWithInventory.h
     ${SRCDIR}/model/Recipe.h
     ${SRCDIR}/model/Salt.h
     ${SRCDIR}/model/Style.h
@@ -494,7 +499,11 @@ IF( NOT ${NO_QTMULTIMEDIA})
    SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES})
+# The dl library is needed on non-Windows platforms for Boost Stacktrace
+IF(NOT WIN32)
+   SET(LIBDL dl)
+ENDIF()
+target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES} ${LIBDL} )
 
 #=================================Tests========================================
 
@@ -521,7 +530,7 @@ IF( NOT ${NO_QTMULTIMEDIA})
 SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES})
+target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES} ${LIBDL})
 
 ADD_TEST(
    NAME pstdintTest
@@ -578,6 +587,8 @@ INSTALL(FILES ${QM_FILES}
 
 # http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
 IF( APPLE )
+   SET ( BOOST_GNU_SOURCE_FLAG "-D_GNU_SOURCE" )
+   SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BOOST_GNU_SOURCE_FLAG}" )
    # make addframeworks should copy the Qt libraries to the app.
    SET(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
    ADD_CUSTOM_TARGET(
